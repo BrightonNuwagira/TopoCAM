@@ -229,13 +229,14 @@ def compute_metrics(y_true, y_pred, y_prob):
         spec = np.mean(TN / (TN + FP + 1e-8))
     return dict(AUC=auc, Accuracy=acc, Precision=prec, Recall=rec, F1=f1, Sensitivity=sens, Specificity=spec)
 
-def evaluate_mlp(X_train, y_train, X_val, y_val, X_test, y_test):
-    clf = MLPClassifier(hidden_layer_sizes=(140, 128, 64), max_iter=500, random_state=42)
+def evaluate_mlp(X_train, y_train, X_test_1, y_test_1):
+    clf = MLPClassifier(hidden_layer_sizes=(140,100, 64), max_iter=500, random_state=42)
     clf.fit(X_train.reshape(len(X_train), -1), y_train.ravel())
-    y_pred = clf.predict(X_test.reshape(len(X_test), -1))
-    y_prob = clf.predict_proba(X_test.reshape(len(X_test), -1))
+    y_pred = clf.predict(X_test_1.reshape(len(X_test_1), -1))
+    y_prob = clf.predict_proba(X_test_1.reshape(len(X_test_1), -1))
     y_score = y_prob[:, 1] if y_prob.shape[1] == 2 else y_prob
-    return compute_metrics(y_test.ravel(), y_pred, y_score)
+    return compute_metrics(y_test_1.ravel(), y_pred, y_score)
+
 
 # === Run pipeline ===
 model = ResNet3DNoInplace(n_classes).to(device)
@@ -258,7 +259,6 @@ def objective(w):
 
     # 3. Evaluate
     metrics = evaluate_mlp(bv_normcount_train, y_train,
-                          bv_normcount_val, y_val,
                           bv_normcount_val, y_val)
     return -metrics['AUC']  # Optimize for validation AUC
 
@@ -288,9 +288,9 @@ bv_normcount_val = append_pixel_count_to_normalized(bv_val, seg_val)
 bv_normcount_test = append_pixel_count_to_normalized(bv_test, seg_test)
 
 # Save vector
-pd.DataFrame(bv_normcount_train).to_csv("Nonormalization_brats2019_imagemasked_normcount_train.csv", index=False)
-pd.DataFrame(bv_normcount_val).to_csv("Nonormalization_brats2019_imagemasked_normcount_val.csv", index=False)
-pd.DataFrame(bv_normcount_test).to_csv("Nonormalization_brats2019_imagemasked_normcount_test.csv", index=False)
+pd.DataFrame(bv_normcount_train).to_csv("brats2019_imagemasked_normcount_train.csv", index=False)
+pd.DataFrame(bv_normcount_val).to_csv("brats2019_imagemasked_normcount_val.csv", index=False)
+pd.DataFrame(bv_normcount_test).to_csv("brats2019_imagemasked_normcount_test.csv", index=False)
 
 
 
@@ -298,13 +298,5 @@ pd.DataFrame(bv_normcount_test).to_csv("Nonormalization_brats2019_imagemasked_no
 
 
 
-# Evaluate and save results
-results = []
-results.append({
-    "Model": "MLP_Betti_NormalizedPlusPixelCount",
-    **evaluate_mlp(bv_normcount_train, y_train, bv_normcount_val, y_val, bv_normcount_test, y_test)
-})
-
-pd.DataFrame(results).to_csv("Nonormalization_brats2019_normcount_results.csv", index=False)
 
 

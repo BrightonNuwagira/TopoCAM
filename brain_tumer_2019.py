@@ -76,10 +76,10 @@ class ResNet3DNoInplace(nn.Module):
             bias=old_conv1.bias is not None
         )
 
-        # Initialize new weights by copying pretrained weights and averaging the 4th channel
+    
         with torch.no_grad():
-            new_conv1.weight[:, :3] = old_conv1.weight  # copy existing weights
-            new_conv1.weight[:, 3:] = old_conv1.weight[:, :1]  # repeat 1st channel
+            new_conv1.weight[:, :3] = old_conv1.weight  
+            new_conv1.weight[:, 3:] = old_conv1.weight[:, :1]  
 
         base.stem[0] = new_conv1  # Replace layer in model
         self.stem = base.stem

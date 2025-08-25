@@ -82,9 +82,9 @@ class ResNet3DNoInplace(nn.Module):
             padding=old_conv.padding,
             bias=old_conv.bias is not None
         )
-        # Average weights of original 3 channels and use for 4
+
         new_conv.weight.data[:, :3] = old_conv.weight.data
-        new_conv.weight.data[:, 3:] = old_conv.weight.data[:, :1]  # duplicate one channel
+        new_conv.weight.data[:, 3:] = old_conv.weight.data[:, :1]  
 
         base.stem[0] = new_conv
         self.stem = base.stem
@@ -227,13 +227,18 @@ def compute_metrics(y_true, y_pred, y_prob):
         spec = np.mean(TN / (TN + FP + 1e-8))
     return dict(AUC=auc, Accuracy=acc, Precision=prec, Recall=rec, F1=f1, Sensitivity=sens, Specificity=spec)
 
-def evaluate_mlp(X_train, y_train, X_val, y_val, X_test, y_test):
-    clf = MLPClassifier(hidden_layer_sizes=(140, 128, 64), max_iter=500, random_state=42)
+
+def evaluate_mlp(X_train, y_train, X_test_1, y_test_1):
+    clf = MLPClassifier(hidden_layer_sizes=(140,100, 64), max_iter=500, random_state=42)
     clf.fit(X_train.reshape(len(X_train), -1), y_train.ravel())
-    y_pred = clf.predict(X_test.reshape(len(X_test), -1))
-    y_prob = clf.predict_proba(X_test.reshape(len(X_test), -1))
+    y_pred = clf.predict(X_test_1.reshape(len(X_test_1), -1))
+    y_prob = clf.predict_proba(X_test_1.reshape(len(X_test_1), -1))
     y_score = y_prob[:, 1] if y_prob.shape[1] == 2 else y_prob
-    return compute_metrics(y_test.ravel(), y_pred, y_score)
+    return compute_metrics(y_test_1.ravel(), y_pred, y_score)
+
+
+
+
 
 model = ResNet3DNoInplace(n_classes).to(device)
 layers = [model.layer2, model.layer3, model.layer4]
@@ -256,7 +261,6 @@ def objective(w):
 
     # 3. Evaluate
     metrics = evaluate_mlp(bv_normcount_train, y_train,
-                          bv_normcount_val, y_val,
                           bv_normcount_val, y_val)
     return -metrics['AUC']  # Optimize for validation AUC
 
@@ -289,24 +293,3 @@ bv_normcount_test = append_pixel_count_to_normalized(bv_test, seg_test)
 pd.DataFrame(bv_normcount_train).to_csv("Nonormalization_rsna_miccai2021_imagemasked_normcount_train.csv", index=False)
 pd.DataFrame(bv_normcount_val).to_csv("Nonormalization_rsna_miccai2021_imagemasked_normcount_val.csv", index=False)
 pd.DataFrame(bv_normcount_test).to_csv("Nonormalization_rsna_miccai2021_imagemasked_normcount_test.csv", index=False)
-
-
-
-
-
-
-
-
-
-
-
-# Evaluate and save results
-results = []
-results.append({
-    "Model": "MLP_Betti_NormalizedPlusPixelCount",
-    **evaluate_mlp(bv_normcount_train, y_train, bv_normcount_val, y_val, bv_normcount_test, y_test)
-})
-
-pd.DataFrame(results).to_csv("Nonormilization_rsna_miccai2021_normcount_results.csv", index=False)
-
-

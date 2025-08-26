@@ -136,7 +136,7 @@ def compute_weighted_gradcam(model, images, labels, layers, weights, threshold=0
 
 
 def evaluate_mlp(X_train, y_train, X_test_1, y_test_1):
-    clf = MLPClassifier(hidden_layer_sizes=(100, 64), max_iter=500, random_state=42)
+    clf = MLPClassifier(hidden_layer_sizes=(140, 100, 64), max_iter=500, random_state=42)
     clf.fit(X_train.reshape(len(X_train), -1), y_train.ravel())
     y_pred = clf.predict(X_test_1.reshape(len(X_test_1), -1))
     y_prob = clf.predict_proba(X_test_1.reshape(len(X_test_1), -1))

@@ -124,11 +124,11 @@ Implements the full TopoCAM pipeline for 2D grayscale medical images such as **B
 **Usage:**
 ```bash
 python 2D_Model.py
-
+```
 
 ### `3D_Model.py`
 
-Implements the full TopoCAM pipeline for 3D volumetric scans such as **SynapseMNIST3D**, **BraTS**, or **NoduleMNIST3D**.
+Implements the full TopoCAM pipeline for 3D volumetric scans.
 
 **Key components:**
 - Pretrained R3D-18 backbone for volumetric feature encoding
@@ -141,3 +141,4 @@ Implements the full TopoCAM pipeline for 3D volumetric scans such as **SynapseMN
 **Usage:**
 ```bash
 python 3D_Model.py
+```

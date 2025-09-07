@@ -104,7 +104,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 
 ---
 
-## 📁 Folder Structure
+##  Folder Structure
 TopoCAM/
 
 ├── 2D_Model.py
@@ -123,7 +123,7 @@ TopoCAM/
 
 ├── README.md
 
-## 🧪 Model Scripts
+## Model Scripts
 
 This repository includes two standalone scripts for running the TopoCAM pipeline on 2D and 3D medical imaging datasets. Each script is modular and can be adapted to new datasets by modifying the input paths and configuration parameters.
 

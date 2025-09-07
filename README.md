@@ -96,12 +96,19 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 ## 📁 Folder Structure
 TopoCAM/
 ├── 2D_Model.py
+
 ├── 3D_Model.py
+
 ├── Nodule_betti_comparison_all_three.png
+
 ├── TopoCAM_3.png
+
 ├── nodule_tsne_comparison_plot.png
+
 ├── synapse_betti_comparison_all_three.png
+
 ├── synapse_tsne_comparison_plot.png
+
 ├── README.md
 
 ## 🧪 Model Scripts

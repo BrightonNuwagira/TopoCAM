@@ -48,21 +48,32 @@ All inputs are resized to standardized shapes (e.g., 64×64×64 for 3D, 224×224
 
 ---
 
-## Performance Highlights
+##  Performance Highlights: TopoCAM vs CNN/ViT Baselines
 
-TopoCAM consistently outperforms CNN and ViT baselines across both 2D and 3D benchmarks:
+TopoCAM consistently delivers superior diagnostic performance across diverse medical imaging tasks, especially in 3D volumes where traditional models often struggle with irrelevant anatomy and limited supervision.
 
-| Dataset           | TopoCAM AUC | TopoCAM Accuracy |
-|------------------|-------------|------------------|
-| BreastMNIST       | 99.9        | 98.7             |
-| PneumoniaMNIST    | 100.0       | 99.4             |
-| FractureMNIST3D   | 99.6        | 98.1             |
-| BraTS 2019        | 94.2        | 98.5             |
-| Harvard OCT       | 78.4        | 81.4             |
+###  3D Medical Imaging Benchmarks
 
+| Dataset             | Modality        | TopoCAM AUC | TopoCAM Accuracy |
+|---------------------|------------------|-------------|------------------|
+| FractureMNIST3D     | CT (bone)        | 99.6        | 98.1             |
+| BraTS 2019          | MRI (brain)      | 94.2        | 98.5             |
+| Harvard OCT         | OCT (retina)     | 78.4        | 81.4             |
+| VesselMNIST3D       | MRA (vasculature)| 98.9        | 97.1             |
+| SynapseMNIST3D      | EM (synapses)    | 98.4        | 81.0             |
+| NoduleMNIST3D       | CT (lung nodules)| 99.6        | 98.1             |
+| AdrenalMNIST3D      | CT (adrenal)     | 95.4        | 91.6             |
+| BraTS 2021          | MRI (brain)      | 64.7        | 58.9             |
+
+###  2D Medical Imaging Benchmarks
+
+| Dataset           | Modality         | TopoCAM AUC | TopoCAM Accuracy |
+|------------------|------------------|-------------|------------------|
+| BreastMNIST      | Ultrasound       | 99.9        | 98.7             |
+| PneumoniaMNIST   | Chest X-Ray      | 100.0       | 99.4             |
 ---
 
-## 📊 Interpretability via Topology
+##  Interpretability via Topology
 
 TopoCAM improves interpretability by focusing on class-relevant regions and summarizing their geometric complexity. The following figures illustrate this:
 

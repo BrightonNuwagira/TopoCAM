@@ -17,6 +17,25 @@ This approach filters out irrelevant anatomy and concentrates analysis on clinic
 
 ---
 
+## 🧩 Pipeline Overview
+
+We define the pipeline as $\hat{y} = g_\psi \circ \phi \circ A_{w,\tau} \circ f_\theta(\mathbf{X})$.
+
+
+Where:
+- `f_θ`: Pretrained CNN backbone (ResNet-18 for 2D, R3D-18 for 3D)
+- `A_{w,τ}`: Weighted Grad-CAM fusion and thresholding
+- `φ`: Betti curve computation from segmented input
+- `g_ψ`: MLP classifier trained on topological features
+
+### 📌 Full Pipeline Visualization
+
+> The figure below illustrates the complete TopoCAM workflow applied to 3D brain MRI scans. It shows input slices, feature extraction via 3D ResNet-18, binary segmentation, and downstream analysis using topological descriptors.
+
+![TopoCAM Pipeline Diagram](TopoCAM_3.png)
+
+---
+
 ## 📦 Datasets
 
 Experiments are conducted on:
@@ -50,7 +69,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 
 > ROI-based Betti curves show reduced variance and clearer class separation compared to full-volume topology.
 
-![Betti Curves Comparison](figures/betti_curves.png)
+![Betti Curves Comparison](Nodule_betti_comparison_all_three.png)
 
 ---
 
@@ -58,7 +77,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 
 > Topological descriptors from segmented regions yield tighter clustering and better class separability.
 
-![t-SNE Comparison](figures/tsne_comparison.png)
+![t-SNE Comparison](nodule_tsne_comparison_plot.png)
 
 ---
 
@@ -72,4 +91,12 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 ---
 
 ## 📁 Folder Structure
-TopoCAM/ ├── 2D_BreastMNIST/ │   ├── train.py │   ├── extract_features.py │   └── optimize_cam_weights.py ├── 3D_SynapseMNIST/ │   ├── train.py │   ├── extract_features.py │   └── optimize_cam_weights.py ├── figures/ │   ├── flowchart.png │   ├── betti_curves.png │   └── tsne_comparison.png ├── README.md
+TopoCAM/
+├── 2D_Model.py
+├── 3D_Model.py
+├── Nodule_betti_comparison_all_three.png
+├── TopoCAM_3.png
+├── nodule_tsne_comparison_plot.png
+├── synapse_betti_comparison_all_three.png
+├── synapse_tsne_comparison_plot.png
+├── README.md

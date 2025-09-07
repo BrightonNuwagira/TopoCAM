@@ -1,10 +1,10 @@
-# 🧠 TopoCAM: ROI-Driven Topological Signatures in Medical Imaging
+#  TopoCAM: ROI-Driven Topological Signatures in Medical Imaging
 
 TopoCAM is a modular framework that combines explainable deep learning with topological data analysis (TDA) for interpretable and robust medical image classification. It supports both **3D volumetric scans** and **2D grayscale images**, and has been validated across multiple MedMNIST and BraTS benchmarks.
 
 ---
 
-## 🔍 Motivation
+##  Motivation
 
 Deep learning models often struggle with interpretability and robustness in clinical settings, especially under limited supervision. TopoCAM addresses this by:
 
@@ -17,7 +17,7 @@ This approach filters out irrelevant anatomy and concentrates analysis on clinic
 
 ---
 
-## 🧩 Pipeline Overview
+##  Pipeline Overview
 
 We define the pipeline as $\hat{y} = g_\psi \circ \phi \circ A_{w,\tau} \circ f_\theta(\mathbf{X})$.
 
@@ -28,7 +28,7 @@ Where:
 - `φ`: Betti curve computation from segmented input
 - `g_ψ`: MLP classifier trained on topological features
 
-### 📌 Full Pipeline Visualization
+###  Full Pipeline Visualization
 
 > The figure below illustrates the complete TopoCAM workflow applied to 3D brain MRI scans. It shows input slices, feature extraction via 3D ResNet-18, binary segmentation, and downstream analysis using topological descriptors.
 
@@ -36,7 +36,7 @@ Where:
 
 ---
 
-## 📦 Datasets
+## Datasets
 
 Experiments are conducted on:
 
@@ -47,7 +47,7 @@ All inputs are resized to standardized shapes (e.g., 64×64×64 for 3D, 224×224
 
 ---
 
-## 📈 Performance Highlights
+## Performance Highlights
 
 TopoCAM consistently outperforms CNN and ViT baselines across both 2D and 3D benchmarks:
 
@@ -65,7 +65,7 @@ TopoCAM consistently outperforms CNN and ViT baselines across both 2D and 3D ben
 
 TopoCAM improves interpretability by focusing on class-relevant regions and summarizing their geometric complexity. The following figures illustrate this:
 
-### 📈 Figure 5: Betti Curves from Original vs. Segmented Volumes
+### Figure 5: Betti Curves from Original vs. Segmented Volumes
 
 > ROI-based Betti curves show reduced variance and clearer class separation compared to full-volume topology.
 
@@ -73,7 +73,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 
 ---
 
-### 🧬 Figure 6: t-SNE Visualization of Betti Vectors
+### Figure 6: t-SNE Visualization of Betti Vectors
 
 > Topological descriptors from segmented regions yield tighter clustering and better class separability.
 
@@ -81,7 +81,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 
 ---
 
-## 🛠️ Implementation Notes
+##  Implementation Notes
 
 - CNN backbones: `resnet18` (2D), `r3d_18` (3D), pretrained on ImageNet/Kinetics-400
 - Grad-CAM fusion weights are optimized via **differential evolution** to maximize AUC

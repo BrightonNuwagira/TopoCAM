@@ -34,6 +34,7 @@ Where:
 
 ![TopoCAM Pipeline Diagram](TopoCAM_3.png)
 
+
 ---
 
 ## Datasets
@@ -70,6 +71,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 > ROI-based Betti curves show reduced variance and clearer class separation compared to full-volume topology.
 
 ![Betti Curves Comparison](Nodule_betti_comparison_all_three.png)
+![Betti Curves Comparison](synapse_betti_comparison_all_three.png)
 
 ---
 
@@ -78,6 +80,7 @@ TopoCAM improves interpretability by focusing on class-relevant regions and summ
 > Topological descriptors from segmented regions yield tighter clustering and better class separability.
 
 ![t-SNE Comparison](nodule_tsne_comparison_plot.png)
+![t-SNE Comparison](synapse_tsne_comparison_plot.png)
 
 ---
 

@@ -103,3 +103,41 @@ TopoCAM/
 ├── synapse_betti_comparison_all_three.png
 ├── synapse_tsne_comparison_plot.png
 ├── README.md
+
+## 🧪 Model Scripts
+
+This repository includes two standalone scripts for running the TopoCAM pipeline on 2D and 3D medical imaging datasets. Each script is modular and can be adapted to new datasets by modifying the input paths and configuration parameters.
+
+---
+
+### `2D_Model.py`
+
+Implements the full TopoCAM pipeline for 2D grayscale medical images such as **BreastMNIST** and **PneumoniaMNIST**.
+
+**Key components:**
+- Pretrained ResNet-18 backbone for feature extraction
+- Multi-layer Grad-CAM attention maps from `layer2`, `layer3`, and `layer4`
+- Weighted fusion of attention maps optimized via AUC
+- ROI masking and Betti curve computation using cubical persistence
+- Lightweight MLP classifier trained on topological descriptors
+
+**Usage:**
+```bash
+python 2D_Model.py
+
+
+### `3D_Model.py`
+
+Implements the full TopoCAM pipeline for 3D volumetric scans such as **SynapseMNIST3D**, **BraTS**, or **NoduleMNIST3D**.
+
+**Key components:**
+- Pretrained R3D-18 backbone for volumetric feature encoding
+- Multi-layer Grad-CAM attention maps from `layer2`, `layer3`, and `layer4`
+- Weighted fusion of attention maps optimized via AUC
+- ROI segmentation via thresholded attention maps
+- Betti vector extraction from segmented volumes using cubical persistence
+- Lightweight MLP classifier trained on topological descriptors
+
+**Usage:**
+```bash
+python 3D_Model.py

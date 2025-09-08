@@ -151,6 +151,7 @@ class TopologyMLP(nn.Module):
         x = F.relu(self.fc2(x))
         return self.fc3(x)
 
+
 def extract_features(model, images, labels, val_images, val_labels):
     model.eval()
     features = []
@@ -182,7 +183,7 @@ def extract_features(model, images, labels, val_images, val_labels):
                     torch.cuda.empty_cache()
 
         except Exception as e:
-            print(f"❌ Skipping sample {i}: {type(e).__name__} - {e}")
+            print(f" Skipping sample {i}: {type(e).__name__} - {e}")
             continue
 
     return np.array(features)
@@ -226,7 +227,7 @@ def optimize_cam_weights(cams, val_images, val_labels, model):
         crit = nn.CrossEntropyLoss()
 
         clf.train()
-        for _ in range(5):
+        for _ in range(100):
             xb = torch.tensor(X_val_topo, dtype=torch.float32).to(DEVICE)
             yb = torch.tensor(y_val_topo, dtype=torch.long).to(DEVICE)
             opt.zero_grad()

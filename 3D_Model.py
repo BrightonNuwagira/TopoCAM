@@ -16,7 +16,7 @@ DATA_PATH = "/work/09457/bxb210001/ls6/3D_UPDATED_project/synapsemnist3d_64.npz"
 SAVE_DIR = "synapse3d_topocam"
 os.makedirs(SAVE_DIR, exist_ok=True)
 BATCH_SIZE = 32
-EPOCHS = 50
+EPOCHS = 100
 THRESHOLD = 0.6
 HOM_DIMS = [0, 1, 2]
 N_BINS = 50
@@ -31,10 +31,6 @@ y_train = y_train.astype(int)
 y_val = y_val.astype(int)
 y_test = y_test.astype(int)
 n_classes = len(np.unique(np.concatenate([y_train, y_val, y_test])))
-
-
-
-
 
 
 # === DATASET ===
@@ -55,13 +51,6 @@ class VolumeDataset(Dataset):
         vol_tensor = vol_tensor.repeat(3, 1, 1, 1)                # [3, T, H, W]
 
         return vol_tensor, self.labels[idx]
-
-
-
-
-
-
-
 
 train_loader = DataLoader(VolumeDataset(X_train, y_train), batch_size=BATCH_SIZE, shuffle=True)
 val_loader = DataLoader(VolumeDataset(X_val, y_val), batch_size=BATCH_SIZE)
@@ -153,10 +142,10 @@ def optimize_cam_weights(cams, val_images, val_labels, model):
 
         for img, label in zip(val_images, val_labels):
             try:
-                img_tensor = torch.tensor(img, dtype=torch.float32)           # [D, H, W]
-                img_tensor = img_tensor.unsqueeze(0).permute(0, 2, 3, 1)      # [1, T, H, W]
-                img_tensor = img_tensor.repeat(3, 1, 1, 1)                     # [3, T, H, W]
-                img_tensor = img_tensor.unsqueeze(0).to(DEVICE)               # [1, 3, T, H, W]
+                img_tensor = torch.tensor(img, dtype=torch.float32)           
+                img_tensor = img_tensor.unsqueeze(0).permute(0, 2, 3, 1)      
+                img_tensor = img_tensor.repeat(3, 1, 1, 1)                     
+                img_tensor = img_tensor.unsqueeze(0).to(DEVICE)               
 
                 with torch.no_grad():
                     out = model(img_tensor)
@@ -170,7 +159,7 @@ def optimize_cam_weights(cams, val_images, val_labels, model):
                 val_feats.append(np.append(feat, label))
 
             except Exception as e:
-                print(f"⚠️ Skipping validation sample: {type(e).__name__} - {e}")
+                print(f"Skipping validation sample: {type(e).__name__} - {e}")
                 continue
 
         if len(val_feats) < 5:
@@ -205,8 +194,8 @@ def optimize_cam_weights(cams, val_images, val_labels, model):
 
         return -auc
 
-    bounds = [(0.01, 1.0)] * len(cams)
-    result = differential_evolution(objective, bounds, maxiter=3, popsize=3)
+    bounds = [(0, 1.0)] * len(cams)
+    result = differential_evolution(objective, bounds, maxiter=50, popsize=15)
     return result.x / (np.sum(result.x) + 1e-8)
 
 
@@ -220,10 +209,10 @@ def extract_features(model, volumes, labels, val_images, val_labels):
     for i in tqdm(range(len(volumes)), desc="Extracting features"):
         try:
             vol = volumes[i]  # shape: [D, H, W]
-            vol_tensor = torch.tensor(vol, dtype=torch.float32)           # [D, H, W]
-            vol_tensor = vol_tensor.unsqueeze(0).permute(0, 2, 3, 1)      # [1, T, H, W]
-            vol_tensor = vol_tensor.repeat(3, 1, 1, 1)                     # [3, T, H, W]
-            vol_tensor = vol_tensor.unsqueeze(0).to(DEVICE)               # [1, 3, T, H, W]
+            vol_tensor = torch.tensor(vol, dtype=torch.float32)           
+            vol_tensor = vol_tensor.unsqueeze(0).permute(0, 2, 3, 1)      
+            vol_tensor = vol_tensor.repeat(3, 1, 1, 1)                     
+            vol_tensor = vol_tensor.unsqueeze(0).to(DEVICE)               
 
             with torch.no_grad():
                 out = model(vol_tensor)
@@ -245,14 +234,10 @@ def extract_features(model, volumes, labels, val_images, val_labels):
                     torch.cuda.empty_cache()
 
         except Exception as e:
-            print(f"❌ Skipping sample {i}: {type(e).__name__} - {e}")
+            print(f" Skipping sample {i}: {type(e).__name__} - {e}")
             continue
 
     return np.array(features)
-
-
-
-
 
 
 def report_metrics(y_true, y_pred, y_prob):
@@ -360,7 +345,7 @@ def main():
     metrics = train_topology_mlp(X_train_topo, y_train_topo, X_val_topo, y_val_topo, X_test_topo, y_test_topo)
 
     pd.DataFrame([metrics]).to_csv(os.path.join(SAVE_DIR, "final_results.csv"), index=False)
-    print("✅ Pipeline complete. Results saved to:", SAVE_DIR)
+    print(" Pipeline complete. Results saved to:", SAVE_DIR)
 
 if __name__ == "__main__":
     main()

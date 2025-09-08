@@ -56,7 +56,7 @@ TopoCAM consistently delivers superior diagnostic performance across diverse med
 
 | Dataset             | Modality        | TopoCAM AUC | TopoCAM Accuracy |
 |---------------------|------------------|-------------|------------------|
-| FractureMNIST3D     | CT (bone)        | 99.6        | 98.1             |
+| FractureMNIST3D     | CT (bone)        | 77.2        | 66.3             |
 | BraTS 2019          | MRI (brain)      | 94.2        | 98.5             |
 | Harvard OCT         | OCT (retina)     | 78.4        | 81.4             |
 | VesselMNIST3D       | MRA (vasculature)| 98.9        | 97.1             |
